@@ -1,12 +1,14 @@
 import React, {useEffect, useState} from "react";
-import {movieService} from "../services";
-import {FilmList} from "../components/FilmList";
-import {genresService} from "../services";
+import {movieService} from "../../services";
+import {FilmList} from "../../components/FilmList";
+import {genresService} from "../../services";
+import {useHistory} from 'react-router-dom'
 
 import styles from './Home.module.css'
 
 
 export const Home = () => {
+    const history = useHistory()
     const [moviesList, setMoviesList] = useState([])
     const [isLoading, setIsLoading] = useState(null)
 
@@ -40,6 +42,7 @@ export const Home = () => {
         const requests = [fetchMovies(),fetchGenres()]
 
         try {
+            setIsLoading(true)
             const [movies,genres] = await Promise.all(requests)
 
             const mergedWithGenresMovies = movies.map((movie)=>{
@@ -51,10 +54,13 @@ export const Home = () => {
                     }
                 })
 
-            console.log(mergedWithGenresMovies)
+            setMoviesList(mergedWithGenresMovies)
 
         }catch (e){
             console.error(e)
+        }finally {
+            setIsLoading(false)
+
         }
     }
 
@@ -68,11 +74,17 @@ export const Home = () => {
         <div className={styles.loading}>Loading...</div>
     )
 
+    const onFilmClick = (film)=>{
+        history.push(`/movie/${film.id}`)
+    }
+
 
     return (
         <div>
             {
-                isLoading || isLoading === null ? renderLoadingIndicator : <FilmList items={moviesList}/>
+                isLoading || isLoading === null ? renderLoadingIndicator : (<FilmList
+                    onFilmClick={onFilmClick}
+                    items={moviesList}/>)
                 //  true ? renderLoadingIndicator : <FilmList />
             }
 
