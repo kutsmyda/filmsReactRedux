@@ -1,0 +1,31 @@
+.mainWrapper{
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: aqua;
+}
+
+.item{
+    height:400px;
+    width: 400px;
+    background-color: blue;
+}
+
+main {
+    flex: 1;
+    padding: 20px;
+    position: relative;
+    overflow-y: auto;
+}
+
+header, footer {
+    padding: 10px 20px;
+}
+
+header {
+    background-color: red;
+}
+
+footer {
+    background-color: yellow;
+}
